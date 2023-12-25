@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RazorPages.Areas.Identity.Data;
 using RazorPages.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using RazorPages.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<RazorPagesUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<RazorPagesContext>();
 builder.Services.AddRazorPages();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
