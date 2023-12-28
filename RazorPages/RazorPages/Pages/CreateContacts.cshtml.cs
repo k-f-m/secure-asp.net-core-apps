@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,8 +11,10 @@ using RazorPages.Models;
 
 namespace RazorPages.Pages
 {
+    [Authorize]
     public class ContactsModel : PageModel
     {
+        public bool IsAdmin => HttpContext.User.HasClaim("IsAdmin", bool.TrueString);
         private readonly RazorPages.Data.RazorPagesContext _context;
 
         public ContactsModel(RazorPages.Data.RazorPagesContext context)
@@ -30,6 +33,7 @@ namespace RazorPages.Pages
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!IsAdmin) return Forbid();
             if (!ModelState.IsValid)
             {
                 return Page();
